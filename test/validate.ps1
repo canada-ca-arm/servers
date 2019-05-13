@@ -5,7 +5,7 @@ Param(
     [string]$subscription = "2de839a0-37f9-4163-a32a-e1bdb8d6eb7e"
 )
 
-$serversDevURL = "https://raw.githubusercontent.com/canada-ca-azure-templates/servers/dev/azuredeploy.json"
+$serversDevURL = "https://raw.githubusercontent.com/canada-ca-azure-templates/servers/dev/template/azuredeploy.json"
 
 #******************************************************************************
 # Script body
