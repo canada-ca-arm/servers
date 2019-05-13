@@ -1,17 +1,18 @@
 Param(
-    [Parameter(Mandatory = $false)][string]$templateLibraryName = "servers",
+    [Parameter(Mandatory = $false)][string]$templateLibraryName = "asg",
     [string]$templateName = "azuredeploy.json",
-    [string]$Location = "canadacentral"
+    [string]$Location = "canadacentral",
+    [string]$subscription = "2de839a0-37f9-4163-a32a-e1bdb8d6eb7e"
 )
 
-$serversDevURL = "https://raw.githubusercontent.com/canada-ca-arm/servers/dev/azuredeploy.json"
+$serversDevURL = "https://raw.githubusercontent.com/canada-ca-azure-templates/servers/dev/azuredeploy.json"
 
 #******************************************************************************
 # Script body
 # Execution begins here
 #******************************************************************************
 
-Select-AzureRmSubscription PwS2-CCC-Validation
+Select-AzureRmSubscription -Subscription $subscription
 
 # Cleanup validation resource content in case it did not properly completed and left over components are still lingeringcd
 Write-Host "Cleanup validation resource content...";
