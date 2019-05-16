@@ -8,7 +8,7 @@
         "rgNames": {
             "value": [
                 {
-                    "resourceGroup": "PwS2-validate-servers-1-RG"
+                    "resourceGroup": "PwS2-validate-servers-RG"
                 }
             ]
         },

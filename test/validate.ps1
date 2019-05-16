@@ -19,6 +19,15 @@ function getValidationURL {
     return $validateURL
 }
 
+function getBaseParametersURL {
+    $remoteURL = git config --get remote.origin.url
+    $currentBranch = git rev-parse --abbrev-ref HEAD
+    $remoteURLnogit = $remoteURL -replace '\.git', ''
+    $remoteURLRAW = $remoteURLnogit -replace 'github.com', 'raw.githubusercontent.com'
+    $baseParametersURL = $remoteURLRAW + '/' + $currentBranch + '/'
+    return $baseParametersURL
+}
+
 $currentBranch = "dev"
 $validationURL = "https://raw.githubusercontent.com/canada-ca-azure-templates/$templateLibraryName/dev/template/azuredeploy.json"
 
@@ -51,7 +60,7 @@ New-AzureRmResourceGroupDeployment -ResourceGroupName PwS2-validate-$templateLib
 # Start the deployment
 Write-Host "Starting $templateLibraryName dependancies deployment...";
 
-New-AzureRmDeployment -Location $Location -Name "Deploy-Infrastructure-Dependancies" -TemplateUri "https://raw.githubusercontent.com/canada-ca-azure-templates/masterdeploy/20190514/template/masterdeploysub.json" -TemplateParameterFile (Resolve-Path -Path "$PSScriptRoot\parameters\masterdeploysub.parameters.json") -Verbose;
+New-AzureRmDeployment -Location $Location -Name "Deploy-Infrastructure-Dependancies" -TemplateUri "https://raw.githubusercontent.com/canada-ca-azure-templates/masterdeploy/20190514/template/masterdeploysub.json" -TemplateParameterFile (Resolve-Path -Path "$PSScriptRoot\parameters\masterdeploysub.parameters.json") -baseParametersURL (getBaseParametersURL) -Verbose;
 
 $provisionningState = (Get-AzureRmDeployment -Name "Deploy-Infrastructure-Dependancies").ProvisioningState
 

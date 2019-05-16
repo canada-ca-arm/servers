@@ -6,9 +6,9 @@
             "value": [
                 {
                     "comment": "Test most basic Windows vm.",
-                    "resourceGroup": "PwS2-validate-servers-1-RG",
+                    "resourceGroup": "PwS2-validate-servers-RG",
                     "vmKeyVault": {
-                        "keyVaultResourceGroupName": "PwS2-validate-servers-1-RG",
+                        "keyVaultResourceGroupName": "PwS2-validate-servers-RG",
                         "keyVaultName": "PwS2-validate-keyvault"
                     },
                     "vm": {
@@ -47,7 +47,7 @@
                             "10.25.8.21"
                         ],
                         "acceleratedNetworking": false,
-                        "vnetResourceGroupName": "PwS2-validate-servers-1-RG",
+                        "vnetResourceGroupName": "PwS2-validate-servers-RG",
                         "vnetName": "PwS2-validate-servers-1-VNET",
                         "subnetName": "test1"
                     },
@@ -62,9 +62,9 @@
                 },
                 {
                     "comment": "Test Linux vm with 2 data disks and Shutdown config",
-                    "resourceGroup": "PwS2-validate-servers-1-RG",
+                    "resourceGroup": "PwS2-validate-servers-RG",
                     "vmKeyVault": {
-                        "keyVaultResourceGroupName": "PwS2-validate-servers-1-RG",
+                        "keyVaultResourceGroupName": "PwS2-validate-servers-RG",
                         "keyVaultName": "PwS2-validate-keyvault"
                     },
                     "vm": {
@@ -121,7 +121,7 @@
                     "networkInterfaces": {
                         "name": "NIC1",
                         "acceleratedNetworking": false,
-                        "vnetResourceGroupName": "PwS2-validate-servers-1-RG",
+                        "vnetResourceGroupName": "PwS2-validate-servers-RG",
                         "vnetName": "PwS2-validate-servers-1-VNET",
                         "subnetName": "test1"
                     },
@@ -136,9 +136,9 @@
                 },
                 {
                     "comment": "This vm demonstrate the association to an Availability Set named test-as. This is an optional parameter.",
-                    "resourceGroup": "PwS2-validate-servers-1-RG",
+                    "resourceGroup": "PwS2-validate-servers-RG",
                     "vmKeyVault": {
-                        "keyVaultResourceGroupName": "PwS2-validate-servers-1-RG",
+                        "keyVaultResourceGroupName": "PwS2-validate-servers-RG",
                         "keyVaultName": "PwS2-validate-keyvault"
                     },
                     "vm": {
@@ -173,7 +173,7 @@
                     "networkInterfaces": {
                         "name": "NIC1",
                         "acceleratedNetworking": false,
-                        "vnetResourceGroupName": "PwS2-validate-servers-1-RG",
+                        "vnetResourceGroupName": "PwS2-validate-servers-RG",
                         "vnetName": "PwS2-validate-servers-1-VNET",
                         "subnetName": "test1"
                     },
@@ -188,9 +188,9 @@
                 },
                 {
                     "comment": "Test basic Windows vm with bitlocker encryption.",
-                    "resourceGroup": "PwS2-validate-servers-1-RG",
+                    "resourceGroup": "PwS2-validate-servers-RG",
                     "vmKeyVault": {
-                        "keyVaultResourceGroupName": "PwS2-validate-servers-1-RG",
+                        "keyVaultResourceGroupName": "PwS2-validate-servers-RG",
                         "keyVaultName": "PwS2-validate-[unique]"
                     },
                     "vm": {
@@ -226,7 +226,7 @@
                     "networkInterfaces": {
                         "name": "NIC1",
                         "acceleratedNetworking": false,
-                        "vnetResourceGroupName": "PwS2-validate-servers-1-RG",
+                        "vnetResourceGroupName": "PwS2-validate-servers-RG",
                         "vnetName": "PwS2-validate-servers-1-VNET",
                         "subnetName": "test1"
                     },
@@ -241,9 +241,9 @@
                 },
                 {
                     "comment": "Test Linux vm with a linuxscript",
-                    "resourceGroup": "PwS2-validate-servers-1-RG",
+                    "resourceGroup": "PwS2-validate-servers-RG",
                     "vmKeyVault": {
-                        "keyVaultResourceGroupName": "PwS2-validate-servers-1-RG",
+                        "keyVaultResourceGroupName": "PwS2-validate-servers-RG",
                         "keyVaultName": "PwS2-validate-keyvault"
                     },
                     "vm": {
@@ -283,7 +283,7 @@
                     "networkInterfaces": {
                         "name": "NIC1",
                         "acceleratedNetworking": false,
-                        "vnetResourceGroupName": "PwS2-validate-servers-1-RG",
+                        "vnetResourceGroupName": "PwS2-validate-servers-RG",
                         "vnetName": "PwS2-validate-servers-1-VNET",
                         "subnetName": "test1"
                     },
@@ -298,9 +298,9 @@
                 },
                 {
                     "comment": "Test a basic Windows vm with DSC script.",
-                    "resourceGroup": "PwS2-validate-servers-1-RG",
+                    "resourceGroup": "PwS2-validate-servers-RG",
                     "vmKeyVault": {
-                        "keyVaultResourceGroupName": "PwS2-validate-servers-1-RG",
+                        "keyVaultResourceGroupName": "PwS2-validate-servers-RG",
                         "keyVaultName": "PwS2-validate-keyvault"
                     },
                     "vm": {
@@ -342,7 +342,7 @@
                     "networkInterfaces": {
                         "name": "NIC1",
                         "acceleratedNetworking": false,
-                        "vnetResourceGroupName": "PwS2-validate-servers-1-RG",
+                        "vnetResourceGroupName": "PwS2-validate-servers-RG",
                         "vnetName": "PwS2-validate-servers-1-VNET",
                         "subnetName": "test1"
                     },
@@ -357,9 +357,9 @@
                 },
                 {
                     "comment": "Test Linux vm with 2 data disks and Shutdown config, Active Directory Login for linux and specific static private ip",
-                    "resourceGroup": "PwS2-validate-servers-1-RG",
+                    "resourceGroup": "PwS2-validate-servers-RG",
                     "vmKeyVault": {
-                        "keyVaultResourceGroupName": "PwS2-validate-servers-1-RG",
+                        "keyVaultResourceGroupName": "PwS2-validate-servers-RG",
                         "keyVaultName": "PwS2-validate-keyvault"
                     },
                     "AADLoginForLinux": {},
@@ -396,7 +396,7 @@
                         "publicIPAddressName": "NIC1-PubIP",
                         "privateIPAddress": "10.96.96.124",
                         "acceleratedNetworking": false,
-                        "vnetResourceGroupName": "PwS2-validate-servers-1-RG",
+                        "vnetResourceGroupName": "PwS2-validate-servers-RG",
                         "vnetName": "PwS2-validate-servers-1-VNET",
                         "subnetName": "test1"
                     },

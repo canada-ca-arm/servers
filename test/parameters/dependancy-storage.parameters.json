@@ -6,7 +6,7 @@
             "value": [
                 {
                     "comment": "Configure vmdiag account in support of servers in resourcegroup",
-                    "resourceGroup": "PwS2-validate-servers-1-RG",
+                    "resourceGroup": "PwS2-validate-servers-RG",
                     "storageAccountPrefix": "vmdiag",
                     "accountType": "Standard_LRS",
                     "kind": "StorageV2",

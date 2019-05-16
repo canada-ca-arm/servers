@@ -6,7 +6,7 @@
             "value": [
                 {
                     "name": "PwS2-validate-keyvault",
-                    "resourceGroup": "PwS2-validate-servers-1-RG",
+                    "resourceGroup": "PwS2-validate-servers-RG",
                     "sku": "Standard",
                     "enabledForDeployment": true,
                     "enabledForTemplateDeployment": true,
@@ -55,7 +55,7 @@
                 },
                 {
                     "name": "PwS2-validate-[unique]",
-                    "resourceGroup": "PwS2-validate-servers-1-RG",
+                    "resourceGroup": "PwS2-validate-servers-RG",
                     "sku": "Standard",
                     "enabledForDeployment": true,
                     "enabledForTemplateDeployment": true,
