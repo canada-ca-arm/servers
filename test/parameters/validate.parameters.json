@@ -9,7 +9,7 @@
                     "resourceGroup": "PwS2-validate-servers-RG",
                     "vmKeyVault": {
                         "keyVaultResourceGroupName": "PwS2-validate-servers-RG",
-                        "keyVaultName": "PwS2-validate-keyvault"
+                        "keyVaultName": "PwS2-validate-[unique]"
                     },
                     "vm": {
                         "computerName": "Test1",
@@ -65,7 +65,7 @@
                     "resourceGroup": "PwS2-validate-servers-RG",
                     "vmKeyVault": {
                         "keyVaultResourceGroupName": "PwS2-validate-servers-RG",
-                        "keyVaultName": "PwS2-validate-keyvault"
+                        "keyVaultName": "PwS2-validate-[unique]"
                     },
                     "vm": {
                         "computerName": "test2",
@@ -139,7 +139,7 @@
                     "resourceGroup": "PwS2-validate-servers-RG",
                     "vmKeyVault": {
                         "keyVaultResourceGroupName": "PwS2-validate-servers-RG",
-                        "keyVaultName": "PwS2-validate-keyvault"
+                        "keyVaultName": "PwS2-validate-[unique]"
                     },
                     "vm": {
                         "computerName": "test3",
@@ -244,7 +244,7 @@
                     "resourceGroup": "PwS2-validate-servers-RG",
                     "vmKeyVault": {
                         "keyVaultResourceGroupName": "PwS2-validate-servers-RG",
-                        "keyVaultName": "PwS2-validate-keyvault"
+                        "keyVaultName": "PwS2-validate-[unique]"
                     },
                     "vm": {
                         "computerName": "test6",
@@ -301,7 +301,7 @@
                     "resourceGroup": "PwS2-validate-servers-RG",
                     "vmKeyVault": {
                         "keyVaultResourceGroupName": "PwS2-validate-servers-RG",
-                        "keyVaultName": "PwS2-validate-keyvault"
+                        "keyVaultName": "PwS2-validate-[unique]"
                     },
                     "vm": {
                         "computerName": "Test7",
@@ -360,7 +360,7 @@
                     "resourceGroup": "PwS2-validate-servers-RG",
                     "vmKeyVault": {
                         "keyVaultResourceGroupName": "PwS2-validate-servers-RG",
-                        "keyVaultName": "PwS2-validate-keyvault"
+                        "keyVaultName": "PwS2-validate-[unique]"
                     },
                     "AADLoginForLinux": {},
                     "vm": {

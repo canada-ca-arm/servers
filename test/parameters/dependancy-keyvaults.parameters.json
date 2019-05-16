@@ -5,55 +5,6 @@
         "keyvaultArray": {
             "value": [
                 {
-                    "name": "PwS2-validate-keyvault",
-                    "resourceGroup": "PwS2-validate-servers-RG",
-                    "sku": "Standard",
-                    "enabledForDeployment": true,
-                    "enabledForTemplateDeployment": true,
-                    "enabledForDiskEncryption": true,
-                    "accessPoliciesObjectId": "267cced3-2154-43ff-b79b-b12c331ad1d1",
-                    "networkAcls": {
-                        "defaultAction": "Allow",
-                        "bypass": "AzureServices",
-                        "virtualNetworkRules": [],
-                        "ipRules": []
-                    },
-                    "secrets": [
-                        {
-                            "name": "server2016DefaultPassword",
-                            "properties": {
-                                "value": "Validate123!"
-                            }
-                        },
-                        {
-                            "name": "linuxDefaultPassword",
-                            "properties": {
-                                "value": "Validate123!"
-                            }
-                        },
-                        {
-                            "name": "adDefaultPassword",
-                            "properties": {
-                                "value": "Validate123!"
-                            }
-                        },
-                        {
-                            "name": "defaultAdminUsername",
-                            "properties": {
-                                "value": "azureadmin"
-                            }
-                        }
-                    ],
-                    "tagValues": {
-                        "Owner": "build.pipeline@tpsgc-pwgsc.gc.ca",
-                        "CostCenter": "PSPC-EA",
-                        "Enviroment": "Validate",
-                        "Classification": "Unclassified",
-                        "Organizations": "PSPC-CCC-E&O",
-                        "DeploymentVersion": "2018-12-14-01"
-                    }
-                },
-                {
                     "name": "PwS2-validate-[unique]",
                     "resourceGroup": "PwS2-validate-servers-RG",
                     "sku": "Standard",
