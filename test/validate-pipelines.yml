@@ -7,5 +7,5 @@ steps:
   inputs:
     azureSubscription: '$(azureSubscriptionValidation)'
     ScriptPath: test/validate.ps1
-    ScriptArguments: ''
+    ScriptArguments: '-devopsCICD'
     azurePowerShellVersion: LatestVersion
