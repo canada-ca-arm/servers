@@ -114,6 +114,11 @@ The following security controls can be met through configuration of this templat
                             "autoShutdownTimeZone": "Eastern Standard Time",
                             "autoShutdownNotificationStatus": "Disabled"
                         },
+                        "backupConfig": {
+                            "existingBackupVaultRG": "PwS3-GCPS-Sharepoint-RG",
+                            "existingBackupVaultName": "PwS3-GCPS-Sharepoint-Backup-Vault",
+                            "existingBackupPolicy": "DailyBackupPolicy"
+                        },
                         "omsAgentForWindows": {
                             "workspaceId": "23b01bc4-90a3-4bf2-9928-d260605e2f12",
                             "workspaceKey": "myWorkSpaceKey"
@@ -145,7 +150,7 @@ The following security controls can be met through configuration of this templat
                                 }
                             }
                         },
-                        "availabilitySet": {},
+                        "availabilitySet": "asName",
                         "plan": {
                             "name": "1-9",
                             "publisher": "bitnami",

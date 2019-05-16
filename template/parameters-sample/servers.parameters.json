@@ -26,7 +26,11 @@
                         },
                         "vmSize": "Standard_B1s",
                         "bootDiagnostic": true,
-                        "existingBackupVaultRG": "nothing",
+                        "backupConfig": {
+                            "existingBackupVaultRG": "PwS3-GCPS-Sharepoint-RG",
+                            "existingBackupVaultName": "PwS3-GCPS-Sharepoint-Backup-Vault",
+                            "existingBackupPolicy": "DailyBackupPolicy"
+                        },
                         "storageProfile": {
                             "osDisk": {
                                 "createOption": "fromImage",
@@ -84,7 +88,11 @@
                         "adminPassword": "ubuntuDefaultPassword",
                         "vmSize": "Standard_B1s",
                         "bootDiagnostic": true,
-                        "existingBackupVaultRG": "nothing",
+                        "backupConfig": {
+                            "existingBackupVaultRG": "PwS3-GCPS-Sharepoint-RG",
+                            "existingBackupVaultName": "PwS3-GCPS-Sharepoint-Backup-Vault",
+                            "existingBackupPolicy": "DailyBackupPolicy"
+                        },
                         "storageProfile": {
                             "osDisk": {
                                 "createOption": "fromImage",
@@ -311,8 +319,7 @@
                                     "storageAccountType": "StandardSSD_LRS"
                                 }
                             }
-                        },
-                        "availabilitySet": {}
+                        }
                     },
                     "networkSecurityGroups": {
                         "name": "nsg",
