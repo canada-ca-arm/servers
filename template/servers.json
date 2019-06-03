@@ -205,10 +205,10 @@
                     {
                         "name": "ipconfig1",
                         "properties": {
+                            "privateIPAllocationMethod": "[if(contains(parameters('vmObject').networkInterfaces, 'privateIPAddress'), 'Static', 'Dynamic')]",
                             "subnet": {
                                 "id": "[concat(subscription().id, '/resourceGroups/', parameters('vmObject').networkInterfaces.vnetResourceGroupName, '/providers/Microsoft.Network/virtualNetworks/', parameters('vmObject').networkInterfaces.vnetName, '/subnets/', parameters('vmObject').networkInterfaces.subnetName)]"
                             },
-                            "privateIPAllocationMethod": "[if(contains(parameters('vmObject').networkInterfaces, 'privateIPAddress'), 'Static', 'Dynamic')]",
                             "privateIPAddress": "[if(contains(parameters('vmObject').networkInterfaces, 'privateIPAddress'), parameters('vmObject').networkInterfaces.privateIPAddress, json('null'))]",
                             "publicIPAddress": "[if(contains(parameters('vmObject').networkInterfaces, 'publicIPAddressesProperties'), pspc.getPublicIPAddressResource(parameters('vmObject').vm.computerName, parameters('vmObject').networkInterfaces.name), json('null'))]",
                             "applicationSecurityGroups": "[if(contains(parameters('vmObject').vm, 'applicationSecurityGroups'), pspc.arrayASGConfig(parameters('vmObject').vm.applicationSecurityGroups), json('null'))]"
@@ -252,21 +252,21 @@
                                         "name": "ipconfig1",
                                         "properties": {
                                             "privateIPAllocationMethod": "Static",
-                                            "privateIPAddress": "[reference(concat('Microsoft.Network/networkInterfaces/', concat(parameters('vmObject').vm.computerName, '-', parameters('vmObject').networkInterfaces.name))).ipConfigurations[0].properties.privateIPAddress]",
                                             "subnet": {
                                                 "id": "[concat(subscription().id, '/resourceGroups/', parameters('vmObject').networkInterfaces.vnetResourceGroupName, '/providers/Microsoft.Network/virtualNetworks/', parameters('vmObject').networkInterfaces.vnetName, '/subnets/', parameters('vmObject').networkInterfaces.subnetName)]"
                                             },
+                                            "privateIPAddress": "[if(contains(parameters('vmObject').networkInterfaces, 'privateIPAddress'), parameters('vmObject').networkInterfaces.privateIPAddress, json('null'))]",
                                             "publicIPAddress": "[if(contains(parameters('vmObject').networkInterfaces, 'publicIPAddressesProperties'), pspc.getPublicIPAddressResource(parameters('vmObject').vm.computerName, parameters('vmObject').networkInterfaces.name), json('null'))]",
                                             "applicationSecurityGroups": "[if(contains(parameters('vmObject').vm, 'applicationSecurityGroups'), pspc.arrayASGConfig(parameters('vmObject').vm.applicationSecurityGroups), json('null'))]"
                                         }
                                     }
                                 ],
-                                "enableAcceleratedNetworking": "[reference(concat('Microsoft.Network/networkInterfaces/', concat(parameters('vmObject').vm.computerName, '-', parameters('vmObject').networkInterfaces.name))).enableAcceleratedNetworking]",
-                                "networkSecurityGroup": {
-                                    "id": "[reference(concat('Microsoft.Network/networkInterfaces/', concat(parameters('vmObject').vm.computerName, '-', parameters('vmObject').networkInterfaces.name))).networkSecurityGroup.Id]"
-                                },
                                 "dnsSettings": {
-                                    "dnsServers": "[reference(concat('Microsoft.Network/networkInterfaces/', concat(parameters('vmObject').vm.computerName, '-', parameters('vmObject').networkInterfaces.name))).dnsSettings.dnsServers]"
+                                    "dnsServers": "[if(contains(parameters('vmObject').networkInterfaces, 'dnsServerPrivateIp'), parameters('vmObject').networkInterfaces.dnsServerPrivateIp, json('[]'))]"
+                                },
+                                "enableAcceleratedNetworking": "[parameters('vmObject').networkInterfaces.acceleratedNetworking]",
+                                "networkSecurityGroup": {
+                                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(parameters('vmObject').vm.computerName, '-', parameters('vmObject').networkSecurityGroups.name))]"
                                 }
                             }
                         }
