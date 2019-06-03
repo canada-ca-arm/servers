@@ -210,7 +210,8 @@
                             },
                             "privateIPAllocationMethod": "[if(contains(parameters('vmObject').networkInterfaces, 'privateIPAddress'), 'Static', 'Dynamic')]",
                             "privateIPAddress": "[if(contains(parameters('vmObject').networkInterfaces, 'privateIPAddress'), parameters('vmObject').networkInterfaces.privateIPAddress, json('null'))]",
-                            "publicIPAddress": "[if(contains(parameters('vmObject').networkInterfaces, 'publicIPAddressesProperties'), pspc.getPublicIPAddressResource(parameters('vmObject').vm.computerName, parameters('vmObject').networkInterfaces.name), json('null'))]"
+                            "publicIPAddress": "[if(contains(parameters('vmObject').networkInterfaces, 'publicIPAddressesProperties'), pspc.getPublicIPAddressResource(parameters('vmObject').vm.computerName, parameters('vmObject').networkInterfaces.name), json('null'))]",
+                            "applicationSecurityGroups": "[if(contains(parameters('vmObject').vm, 'applicationSecurityGroups'), pspc.arrayASGConfig(parameters('vmObject').vm.applicationSecurityGroups), json('null'))]"
                         }
                     }
                 ],
@@ -228,7 +229,8 @@
             "name": "[concat(parameters('vmObject').vm.computerName, '-', parameters('vmObject').networkInterfaces.name, '-makeIPStatic')]",
             "apiVersion": "2017-08-01",
             "dependsOn": [
-                "[concat(parameters('vmObject').vm.computerName, '-', parameters('vmObject').networkInterfaces.name)]"
+                "[concat(parameters('vmObject').vm.computerName, '-', parameters('vmObject').networkInterfaces.name)]",
+                "[concat(parameters('vmObject').vm.computerName, '-', parameters('vmObject').networkInterfaces.name, '-pubIP')]"
             ],
             "condition": "[not(contains(parameters('vmObject').networkInterfaces, 'privateIPAddress'))]",
             "properties": {
@@ -254,6 +256,7 @@
                                             "subnet": {
                                                 "id": "[concat(subscription().id, '/resourceGroups/', parameters('vmObject').networkInterfaces.vnetResourceGroupName, '/providers/Microsoft.Network/virtualNetworks/', parameters('vmObject').networkInterfaces.vnetName, '/subnets/', parameters('vmObject').networkInterfaces.subnetName)]"
                                             },
+                                            "publicIPAddress": "[if(contains(parameters('vmObject').networkInterfaces, 'publicIPAddressesProperties'), pspc.getPublicIPAddressResource(parameters('vmObject').vm.computerName, parameters('vmObject').networkInterfaces.name), json('null'))]",
                                             "applicationSecurityGroups": "[if(contains(parameters('vmObject').vm, 'applicationSecurityGroups'), pspc.arrayASGConfig(parameters('vmObject').vm.applicationSecurityGroups), json('null'))]"
                                         }
                                     }
