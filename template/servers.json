@@ -186,6 +186,9 @@
                     },
                     "publicIPAddressName": {
                         "value": "[concat(parameters('vmObject').vm.computerName, '-', parameters('vmObject').networkInterfaces.name, '-pubIP')]"
+                    },
+                    "tags": {
+                        "value": "[parameters('vmObject').tagValues]"
                     }
                 }
             }

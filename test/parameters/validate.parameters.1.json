@@ -123,7 +123,13 @@
                         "acceleratedNetworking": false,
                         "vnetResourceGroupName": "PwS2-validate-servers-RG",
                         "vnetName": "PwS2-validate-servers-1-VNET",
-                        "subnetName": "test1"
+                        "subnetName": "test1",
+                        "publicIPAddressesProperties": {
+                            "publicIPAllocationMethod": "Dynamic",
+                            "dnsSettings": {
+                                "domainNameLabel": "mytest[unique]"
+                            }
+                        }
                     },
                     "tagValues": {
                         "Owner": "build.pipeline@tpsgc-pwgsc.gc.ca",
