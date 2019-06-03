@@ -197,7 +197,8 @@
             "tags": "[parameters('vmObject').tagValues]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[concat('Microsoft.Network/networkSecurityGroups/', parameters('vmObject').vm.computerName, '-', parameters('vmObject').networkSecurityGroups.name)]"
+                "[concat('Microsoft.Network/networkSecurityGroups/', parameters('vmObject').vm.computerName, '-', parameters('vmObject').networkSecurityGroups.name)]",
+                "[concat(parameters('vmObject').vm.computerName, '-', parameters('vmObject').networkInterfaces.name, '-pubIP')]"
             ],
             "properties": {
                 "ipConfigurations": [
