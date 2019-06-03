@@ -29,6 +29,7 @@
         "omsAgentForLinuxURI": "[concat(uri(parameters('_artifactsLocation'), 'nested/omsAgentForLinux.json'), parameters('containerSasToken'))]",
         "omsAgentForWindowsURI": "[concat(uri(parameters('_artifactsLocation'), 'nested/omsAgentForWindows.json'), parameters('containerSasToken'))]",
         "windowsAntimalwareURI": "[concat(uri(parameters('_artifactsLocation'), 'nested/windowsAntimalware.json'), parameters('containerSasToken'))]",
+        "publicIPAddressURI": "[concat(uri(parameters('_artifactsLocation'), 'nested/publicIP.json'), parameters('containerSasToken'))]",
         "iisExtensionName": "iisExtension",
         "iisConfigurationFunction": "PrepareWebServer.ps1\\PrepareWebServer",
         "iisConfigurationScript": "PrepareWebServer.ps1.zip",
@@ -150,6 +151,29 @@
                     "timeInMinutes": "30"
                 }
             }
+        },
+        {
+            "condition": "[contains(parameters('vmObject').networkInterfaces,'publicIPAddressesProperties')]",
+            "name": "[concat(parameters('vmObject').vm.computerName, '-', parameters('vmObject').networkInterfaces.name, '-pubIP')]",
+            "apiVersion": "2015-01-01",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('publicIPAddressURI')]"
+                },
+                "parameters": {
+                    "publicIPAddressProperties": {
+                        "value": "[parameters('vmObject').networkInterfaces.publicIPAddressesProperties]"
+                    },
+                    "publicIPAddressName": {
+                        "value": "[concat(parameters('vmObject').vm.computerName, '-', parameters('vmObject').networkInterfaces.name, '-pubIP')]"
+                    }
+                }
+            },
+            "dependsOn": [
+                "[concat('Deploy-', parameters('vmObject').vm.computerName)]"
+            ]
         },
         {
             "name": "[concat(parameters('vmObject').vm.computerName, '-', parameters('vmObject').networkInterfaces.name)]",

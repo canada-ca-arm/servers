@@ -1,0 +1,47 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "publicIPAddressProperties": {
+            "type": "object"
+        },
+        "publicIPAddressName": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "publicIPAddressProperties": "[pspc.replaceDNSName(parameters('publicIPAddressProperties'), uniqueString(resourceGroup().id))]"
+    },
+    "functions": [
+        {
+            "namespace": "pspc",
+            "members": {
+                "replaceDNSName": {
+                    "parameters": [
+                        {
+                            "name": "publicIPObj",
+                            "type": "object"
+                        },
+                        {
+                            "name": "uniqueID",
+                            "type": "string"
+                        }
+                    ],
+                    "output": {
+                        "type": "object",
+                        "value": "[json(replace(string(parameters('publicIPObj')), '[unique]', parameters('uniqueID')))]"
+                    }
+                }
+            }
+        }
+    ],
+    "resources": [
+        {
+            "apiVersion": "2018-11-01",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "name": "[parameters('publicIPAddressName')]",
+            "location": "[resourceGroup().location]",
+            "properties": "[variables('publicIPAddressProperties')]"
+        }
+    ]
+}

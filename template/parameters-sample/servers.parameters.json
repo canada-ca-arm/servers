@@ -61,7 +61,13 @@
                         "vnetResourceGroupName": "AzPwS01-Infra-NetMGMT-RG",
                         "vnetName": "AzPwS01-Infra-NetMGMT-VNET",
                         "subnetName": "PAZ",
-                        "acceleratedNetworking": false
+                        "acceleratedNetworking": false,
+                        "publicIPAddressesProperties": {
+                            "publicIPAllocationMethod": "Dynamic",
+                            "dnsSettings": {
+                                "domainNameLabel": "mytestvm[unique]"
+                            }
+                        }
                     },
                     "tagValues": {
                         "Owner": "charles.vriesendorp@tpsgc-pwgsc.gc.ca",
