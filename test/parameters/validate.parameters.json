@@ -5,6 +5,62 @@
         "vmArray": {
             "value": [
                 {
+                    "comment": "Test most basic Windows vm.",
+                    "resourceGroup": "PwS2-validate-servers-RG",
+                    "vmKeyVault": {
+                        "keyVaultResourceGroupName": "PwS2-validate-servers-RG",
+                        "keyVaultName": "PwS2-validate-[unique]"
+                    },
+                    "vm": {
+                        "computerName": "Test1",
+                        "adminUsername": "azureadmin",
+                        "adminPassword": "server2016DefaultPassword",
+                        "licenseType": "Windows_Server",
+                        "vmSize": "Standard_B2S",
+                        "bootDiagnostic": true,
+                        "storageProfile": {
+                            "imageReference": {
+                                "publisher": "MicrosoftWindowsServer",
+                                "offer": "WindowsServer",
+                                "sku": "2016-Datacenter",
+                                "version": "latest"
+                            },
+                            "dataDisks": [],
+                            "osDisk": {
+                                "createOption": "fromImage",
+                                "managedDisk": {
+                                    "storageAccountType": "StandardSSD_LRS"
+                                }
+                            }
+                        }
+                    },
+                    "networkSecurityGroups": {
+                        "name": "nsg",
+                        "properties": {
+                            "securityRules": []
+                        }
+                    },
+                    "networkInterfaces": {
+                        "name": "NIC1",
+                        "dnsServerPrivateIp": [
+                            "10.25.8.20",
+                            "10.25.8.21"
+                        ],
+                        "acceleratedNetworking": false,
+                        "vnetResourceGroupName": "PwS2-validate-servers-RG",
+                        "vnetName": "PwS2-validate-servers-1-VNET",
+                        "subnetName": "test1"
+                    },
+                    "tagValues": {
+                        "Owner": "build.pipeline@tpsgc-pwgsc.gc.ca",
+                        "CostCenter": "PSPC-EA",
+                        "Enviroment": "Validate",
+                        "Classification": "Unclassified",
+                        "Organizations": "PSPC-CCC-E&O",
+                        "DeploymentVersion": "2019-01-11-01"
+                    }
+                },
+                {
                     "comment": "Test Linux vm with 2 data disks and Shutdown config",
                     "resourceGroup": "PwS2-validate-servers-RG",
                     "vmKeyVault": {
@@ -13,6 +69,308 @@
                     },
                     "vm": {
                         "computerName": "test2",
+                        "adminUsername": "azureadmin",
+                        "adminPassword": "linuxDefaultPassword",
+                        "shutdownConfig": {
+                            "autoShutdownStatus": "Enabled",
+                            "autoShutdownTime": "17:00",
+                            "autoShutdownTimeZone": "Eastern Standard Time",
+                            "autoShutdownNotificationStatus": "Disabled"
+                        },
+                        "vmSize": "Standard_B1s",
+                        "bootDiagnostic": true,
+                        "storageProfile": {
+                            "osDisk": {
+                                "createOption": "fromImage",
+                                "managedDisk": {
+                                    "storageAccountType": "StandardSSD_LRS"
+                                }
+                            },
+                            "dataDisks": [
+                                {
+                                    "diskSizeGB": "1024",
+                                    "lun": 0,
+                                    "createOption": "Empty",
+                                    "managedDisk": {
+                                        "storageAccountType": "StandardSSD_LRS"
+                                    }
+                                },
+                                {
+                                    "diskSizeGB": "512",
+                                    "lun": 1,
+                                    "createOption": "Empty",
+                                    "managedDisk": {
+                                        "storageAccountType": "StandardSSD_LRS"
+                                    }
+                                }
+                            ],
+                            "imageReference": {
+                                "publisher": "Canonical",
+                                "offer": "UbuntuServer",
+                                "sku": "18.04-LTS",
+                                "version": "latest"
+                            }
+                        }
+                    },
+                    "networkSecurityGroups": {
+                        "name": "nsg",
+                        "properties": {
+                            "securityRules": []
+                        }
+                    },
+                    "networkInterfaces": {
+                        "name": "NIC1",
+                        "acceleratedNetworking": false,
+                        "vnetResourceGroupName": "PwS2-validate-servers-RG",
+                        "vnetName": "PwS2-validate-servers-1-VNET",
+                        "subnetName": "test1",
+                        "publicIPAddressesProperties": {
+                            "publicIPAllocationMethod": "Dynamic",
+                            "dnsSettings": {
+                                "domainNameLabel": "mytest[unique]"
+                            }
+                        }
+                    },
+                    "tagValues": {
+                        "Owner": "build.pipeline@tpsgc-pwgsc.gc.ca",
+                        "CostCenter": "PSPC-EA",
+                        "Enviroment": "Validate",
+                        "Classification": "Unclassified",
+                        "Organizations": "PSPC-CCC-E&O",
+                        "DeploymentVersion": "2019-01-11-01"
+                    }
+                },
+                {
+                    "comment": "This vm demonstrate the association to an Availability Set named test-as. This is an optional parameter.",
+                    "resourceGroup": "PwS2-validate-servers-RG",
+                    "vmKeyVault": {
+                        "keyVaultResourceGroupName": "PwS2-validate-servers-RG",
+                        "keyVaultName": "PwS2-validate-[unique]"
+                    },
+                    "vm": {
+                        "computerName": "test3",
+                        "adminUsername": "azureadmin",
+                        "adminPassword": "linuxDefaultPassword",
+                        "vmSize": "Standard_B1s",
+                        "bootDiagnostic": true,
+                        "availabilitySetName": "test-as",
+                        "storageProfile": {
+                            "osDisk": {
+                                "createOption": "fromImage",
+                                "managedDisk": {
+                                    "storageAccountType": "StandardSSD_LRS"
+                                }
+                            },
+                            "dataDisks": [],
+                            "imageReference": {
+                                "publisher": "Canonical",
+                                "offer": "UbuntuServer",
+                                "sku": "18.04-LTS",
+                                "version": "latest"
+                            }
+                        }
+                    },
+                    "networkSecurityGroups": {
+                        "name": "nsg",
+                        "properties": {
+                            "securityRules": []
+                        }
+                    },
+                    "networkInterfaces": {
+                        "name": "NIC1",
+                        "acceleratedNetworking": false,
+                        "vnetResourceGroupName": "PwS2-validate-servers-RG",
+                        "vnetName": "PwS2-validate-servers-1-VNET",
+                        "subnetName": "test1"
+                    },
+                    "tagValues": {
+                        "Owner": "build.pipeline@tpsgc-pwgsc.gc.ca",
+                        "CostCenter": "PSPC-EA",
+                        "Enviroment": "Validate",
+                        "Classification": "Unclassified",
+                        "Organizations": "PSPC-CCC-E&O",
+                        "DeploymentVersion": "2019-01-11-01"
+                    }
+                },
+                {
+                    "comment": "Test basic Windows vm with bitlocker encryption.",
+                    "resourceGroup": "PwS2-validate-servers-RG",
+                    "vmKeyVault": {
+                        "keyVaultResourceGroupName": "PwS2-validate-servers-RG",
+                        "keyVaultName": "PwS2-validate-[unique]"
+                    },
+                    "vm": {
+                        "computerName": "Test5",
+                        "adminUsername": "azureadmin",
+                        "adminPassword": "server2016DefaultPassword",
+                        "licenseType": "Windows_Server",
+                        "vmSize": "Standard_B2S",
+                        "bootDiagnostic": true,
+                        "encryptDisks": {},
+                        "storageProfile": {
+                            "imageReference": {
+                                "publisher": "MicrosoftWindowsServer",
+                                "offer": "WindowsServer",
+                                "sku": "2016-Datacenter",
+                                "version": "latest"
+                            },
+                            "dataDisks": [],
+                            "osDisk": {
+                                "createOption": "fromImage",
+                                "managedDisk": {
+                                    "storageAccountType": "StandardSSD_LRS"
+                                }
+                            }
+                        }
+                    },
+                    "networkSecurityGroups": {
+                        "name": "nsg",
+                        "properties": {
+                            "securityRules": []
+                        }
+                    },
+                    "networkInterfaces": {
+                        "name": "NIC1",
+                        "acceleratedNetworking": false,
+                        "vnetResourceGroupName": "PwS2-validate-servers-RG",
+                        "vnetName": "PwS2-validate-servers-1-VNET",
+                        "subnetName": "test1"
+                    },
+                    "tagValues": {
+                        "Owner": "build.pipeline@tpsgc-pwgsc.gc.ca",
+                        "CostCenter": "PSPC-EA",
+                        "Enviroment": "Validate",
+                        "Classification": "Unclassified",
+                        "Organizations": "PSPC-CCC-E&O",
+                        "DeploymentVersion": "2019-01-11-01"
+                    }
+                },
+                {
+                    "comment": "Test Linux vm with a linuxscript",
+                    "resourceGroup": "PwS2-validate-servers-RG",
+                    "vmKeyVault": {
+                        "keyVaultResourceGroupName": "PwS2-validate-servers-RG",
+                        "keyVaultName": "PwS2-validate-[unique]"
+                    },
+                    "vm": {
+                        "computerName": "test6",
+                        "adminUsername": "azureadmin",
+                        "adminPassword": "linuxDefaultPassword",
+                        "vmSize": "Standard_B1s",
+                        "bootDiagnostic": true,
+                        "linuxScript": {
+                            "comment": "The code in script is coded with cat script.sh | base64 -w0",
+                            "protectedSettings": {
+                                "script": "IyEvYmluL3NoCmVjaG8gIkluc3RhbGxpbmcgZG9ja2VyLi4uIgpzdWRvIHNuYXAgaW5zdGFsbCBkb2NrZXIK"
+                            }
+                        },
+                        "storageProfile": {
+                            "osDisk": {
+                                "createOption": "fromImage",
+                                "managedDisk": {
+                                    "storageAccountType": "StandardSSD_LRS"
+                                }
+                            },
+                            "dataDisks": [],
+                            "imageReference": {
+                                "publisher": "Canonical",
+                                "offer": "UbuntuServer",
+                                "sku": "18.04-LTS",
+                                "version": "latest"
+                            }
+                        }
+                    },
+                    "networkSecurityGroups": {
+                        "name": "nsg",
+                        "properties": {
+                            "securityRules": []
+                        }
+                    },
+                    "networkInterfaces": {
+                        "name": "NIC1",
+                        "acceleratedNetworking": false,
+                        "vnetResourceGroupName": "PwS2-validate-servers-RG",
+                        "vnetName": "PwS2-validate-servers-1-VNET",
+                        "subnetName": "test1"
+                    },
+                    "tagValues": {
+                        "Owner": "build.pipeline@tpsgc-pwgsc.gc.ca",
+                        "CostCenter": "PSPC-EA",
+                        "Enviroment": "Validate",
+                        "Classification": "Unclassified",
+                        "Organizations": "PSPC-CCC-E&O",
+                        "DeploymentVersion": "2019-01-11-01"
+                    }
+                },
+                {
+                    "comment": "Test a basic Windows vm with DSC script.",
+                    "resourceGroup": "PwS2-validate-servers-RG",
+                    "vmKeyVault": {
+                        "keyVaultResourceGroupName": "PwS2-validate-servers-RG",
+                        "keyVaultName": "PwS2-validate-[unique]"
+                    },
+                    "vm": {
+                        "computerName": "Test7",
+                        "adminUsername": "azureadmin",
+                        "adminPassword": "server2016DefaultPassword",
+                        "licenseType": "Windows_Server",
+                        "vmSize": "Standard_B2S",
+                        "bootDiagnostic": true,
+                        "storageProfile": {
+                            "imageReference": {
+                                "publisher": "MicrosoftWindowsServer",
+                                "offer": "WindowsServer",
+                                "sku": "2016-Datacenter",
+                                "version": "latest"
+                            },
+                            "dataDisks": [],
+                            "osDisk": {
+                                "createOption": "fromImage",
+                                "managedDisk": {
+                                    "storageAccountType": "StandardSSD_LRS"
+                                }
+                            }
+                        },
+                        "DSCSettings": {
+                            "configuration": {
+                                "url": "https://azpwsdeployment.blob.core.windows.net/dsc/helloworld/helloworld.zip",
+                                "script": "helloworld.ps1",
+                                "function": "helloworld"
+                            }
+                        }
+                    },
+                    "networkSecurityGroups": {
+                        "name": "nsg",
+                        "properties": {
+                            "securityRules": []
+                        }
+                    },
+                    "networkInterfaces": {
+                        "name": "NIC1",
+                        "acceleratedNetworking": false,
+                        "vnetResourceGroupName": "PwS2-validate-servers-RG",
+                        "vnetName": "PwS2-validate-servers-1-VNET",
+                        "subnetName": "test1"
+                    },
+                    "tagValues": {
+                        "Owner": "build.pipeline@tpsgc-pwgsc.gc.ca",
+                        "CostCenter": "PSPC-EA",
+                        "Enviroment": "Validate",
+                        "Classification": "Unclassified",
+                        "Organizations": "PSPC-CCC-E&O",
+                        "DeploymentVersion": "2019-01-11-01"
+                    }
+                },
+                {
+                    "comment": "Test Linux vm with 2 data disks and Shutdown config, Active Directory Login for linux and specific static private ip",
+                    "resourceGroup": "PwS2-validate-servers-RG",
+                    "vmKeyVault": {
+                        "keyVaultResourceGroupName": "PwS2-validate-servers-RG",
+                        "keyVaultName": "PwS2-validate-[unique]"
+                    },
+                    "AADLoginForLinux": {},
+                    "vm": {
+                        "computerName": "test8",
                         "adminUsername": "azureadmin",
                         "adminPassword": "linuxDefaultPassword",
                         "vmSize": "Standard_B1s",
@@ -41,16 +399,12 @@
                     },
                     "networkInterfaces": {
                         "name": "NIC1",
+                        "publicIPAddressName": "NIC1-PubIP",
+                        "privateIPAddress": "10.96.96.124",
                         "acceleratedNetworking": false,
                         "vnetResourceGroupName": "PwS2-validate-servers-RG",
                         "vnetName": "PwS2-validate-servers-1-VNET",
-                        "subnetName": "test1",
-                        "publicIPAddressesProperties": {
-                            "publicIPAllocationMethod": "Dynamic",
-                            "dnsSettings": {
-                                "domainNameLabel": "mytestvmmjo8servtnuweovly"
-                            }
-                        }
+                        "subnetName": "test1"
                     },
                     "tagValues": {
                         "Owner": "build.pipeline@tpsgc-pwgsc.gc.ca",
