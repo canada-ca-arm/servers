@@ -2,7 +2,7 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "vmObject": {
+        "objectect": {
             "type": "object",
             "metadata": {
                 "description": "Object of MS firewall objects."
@@ -20,7 +20,7 @@
         }
     },
     "variables": {
-        "backupItemName": "[concat('vm;iaasvmcontainerv2;', resourceGroup().name,';',parameters('vmObject').vm.computerName)]",
+        "backupItemName": "[concat('vm;iaasvmcontainerv2;', resourceGroup().name,';',parameters('objectect').vm.computerName)]",
         "domainJoinURI": "[concat(uri(parameters('_artifactsLocation'), 'nested/domainjoin.json'), parameters('containerSasToken'))]",
         "linuxDomainJoinURI": "[concat(uri(parameters('_artifactsLocation'), 'nested/linuxdomainjoin.json'), parameters('containerSasToken'))]",
         "virtualMachineURI": "[concat(uri(parameters('_artifactsLocation'), 'nested/virtualmachine.json'), parameters('containerSasToken'))]",
@@ -109,6 +109,26 @@
                             "id": "[resourceId ('Microsoft.Network/publicIPAddresses/', concat(parameters('computerName'), '-', parameters('networkInterfaceName'), '-pubIP'))]"
                         }
                     }
+                },
+                "replaceInObject": {
+                    "parameters": [
+                        {
+                            "name": "object",
+                            "type": "object"
+                        },
+                        {
+                            "name": "search",
+                            "type": "string"
+                        },
+                        {
+                            "name": "replace",
+                            "type": "string"
+                        }
+                    ],
+                    "output": {
+                        "type": "object",
+                        "value": "[json(replace(string(parameters('object')), parameters('search'), parameters('replace')))]"
+                    }
                 }
             }
         }
@@ -116,11 +136,11 @@
     "resources": [
         {
             "type": "Microsoft.Resources/deployments",
-            "name": "[concat('Deploy-', parameters('vmObject').vm.computerName)]",
+            "name": "[concat('Deploy-', parameters('objectect').vm.computerName)]",
             "apiVersion": "2018-02-01",
             "dependsOn": [
-                "[concat('Microsoft.Network/networkInterfaces/', parameters('vmObject').vm.computerName, '-', parameters('vmObject').networkInterfaces.name)]",
-                "[concat(parameters('vmObject').vm.computerName, '-', parameters('vmObject').networkInterfaces.name, '-makeIPStatic')]"
+                "[concat('Microsoft.Network/networkInterfaces/', parameters('objectect').vm.computerName, '-', parameters('objectect').networkInterfaces.name)]",
+                "[concat(parameters('objectect').vm.computerName, '-', parameters('objectect').networkInterfaces.name, '-makeIPStatic')]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -132,47 +152,47 @@
                     "adminPassword": {
                         "reference": {
                             "keyVault": {
-                                "id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('vmObject').vmKeyVault.keyVaultResourceGroupName, '/providers/Microsoft.KeyVault/vaults/', pspc.getValidKeyvaultName(pspc.getUniqueKeyvaultName(parameters('vmObject').vmKeyVault.keyVaultName, pspc.getResourceGroupID(parameters('vmObject').vmKeyVault.keyVaultResourceGroupName))))]"
+                                "id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('objectect').vmKeyVault.keyVaultResourceGroupName, '/providers/Microsoft.KeyVault/vaults/', pspc.getValidKeyvaultName(pspc.getUniqueKeyvaultName(parameters('objectect').vmKeyVault.keyVaultName, pspc.getResourceGroupID(parameters('objectect').vmKeyVault.keyVaultResourceGroupName))))]"
                             },
-                            "secretName": "[parameters('vmObject').vm.adminPassword]"
+                            "secretName": "[parameters('objectect').vm.adminPassword]"
                         }
                     },
-                    "vmObject": {
-                        "value": "[parameters('vmObject')]"
+                    "objectect": {
+                        "value": "[parameters('objectect')]"
                     },
                     "keyVaultId": {
-                        "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('vmObject').vmKeyVault.keyVaultResourceGroupName, '/providers/Microsoft.KeyVault/vaults/', pspc.getValidKeyvaultName(pspc.getUniqueKeyvaultName(parameters('vmObject').vmKeyVault.keyVaultName, pspc.getResourceGroupID(parameters('vmObject').vmKeyVault.keyVaultResourceGroupName))))]"
+                        "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('objectect').vmKeyVault.keyVaultResourceGroupName, '/providers/Microsoft.KeyVault/vaults/', pspc.getValidKeyvaultName(pspc.getUniqueKeyvaultName(parameters('objectect').vmKeyVault.keyVaultName, pspc.getResourceGroupID(parameters('objectect').vmKeyVault.keyVaultResourceGroupName))))]"
                     },
                 }
             }
         },
         {
-            "condition": "[contains(parameters('vmObject').vm,'shutdownConfig')]",
-            "name": "[concat('shutdown-computevm-', parameters('vmObject').vm.computerName)]",
+            "condition": "[contains(parameters('objectect').vm,'shutdownConfig')]",
+            "name": "[concat('shutdown-computevm-', parameters('objectect').vm.computerName)]",
             "type": "Microsoft.DevTestLab/schedules",
             "apiVersion": "2017-04-26-preview",
-            "tags": "[parameters('vmObject').tagValues]",
+            "tags": "[parameters('objectect').tagValues]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[concat('Deploy-', parameters('vmObject').vm.computerName)]"
+                "[concat('Deploy-', parameters('objectect').vm.computerName)]"
             ],
             "properties": {
-                "status": "[parameters('vmObject').vm.shutdownConfig.autoShutdownStatus]",
+                "status": "[parameters('objectect').vm.shutdownConfig.autoShutdownStatus]",
                 "taskType": "ComputeVmShutdownTask",
                 "dailyRecurrence": {
-                    "time": "[parameters('vmObject').vm.shutdownConfig.autoShutdownTime]"
+                    "time": "[parameters('objectect').vm.shutdownConfig.autoShutdownTime]"
                 },
-                "timeZoneId": "[parameters('vmObject').vm.shutdownConfig.autoShutdownTimeZone]",
-                "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines', parameters('vmObject').vm.computerName)]",
+                "timeZoneId": "[parameters('objectect').vm.shutdownConfig.autoShutdownTimeZone]",
+                "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines', parameters('objectect').vm.computerName)]",
                 "notificationSettings": {
-                    "status": "[parameters('vmObject').vm.shutdownConfig.autoShutdownNotificationStatus]",
+                    "status": "[parameters('objectect').vm.shutdownConfig.autoShutdownNotificationStatus]",
                     "timeInMinutes": "30"
                 }
             }
         },
         {
-            "condition": "[contains(parameters('vmObject').networkInterfaces,'publicIPAddressesProperties')]",
-            "name": "[concat(parameters('vmObject').vm.computerName, '-', parameters('vmObject').networkInterfaces.name, '-pubIP')]",
+            "condition": "[contains(parameters('objectect').networkInterfaces,'publicIPAddressesProperties')]",
+            "name": "[concat(parameters('objectect').vm.computerName, '-', parameters('objectect').networkInterfaces.name, '-pubIP')]",
             "apiVersion": "2015-01-01",
             "type": "Microsoft.Resources/deployments",
             "properties": {
@@ -182,60 +202,60 @@
                 },
                 "parameters": {
                     "publicIPAddressProperties": {
-                        "value": "[parameters('vmObject').networkInterfaces.publicIPAddressesProperties]"
+                        "value": "[parameters('objectect').networkInterfaces.publicIPAddressesProperties]"
                     },
                     "publicIPAddressName": {
-                        "value": "[concat(parameters('vmObject').vm.computerName, '-', parameters('vmObject').networkInterfaces.name, '-pubIP')]"
+                        "value": "[concat(parameters('objectect').vm.computerName, '-', parameters('objectect').networkInterfaces.name, '-pubIP')]"
                     },
                     "tags": {
-                        "value": "[parameters('vmObject').tagValues]"
+                        "value": "[parameters('objectect').tagValues]"
                     }
                 }
             }
         },
         {
-            "name": "[concat(parameters('vmObject').vm.computerName, '-', parameters('vmObject').networkInterfaces.name)]",
+            "name": "[concat(parameters('objectect').vm.computerName, '-', parameters('objectect').networkInterfaces.name)]",
             "type": "Microsoft.Network/networkInterfaces",
             "apiVersion": "2019-02-01",
-            "tags": "[parameters('vmObject').tagValues]",
+            "tags": "[parameters('objectect').tagValues]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[concat('Microsoft.Network/networkSecurityGroups/', parameters('vmObject').vm.computerName, '-', parameters('vmObject').networkSecurityGroups.name)]",
-                "[concat(parameters('vmObject').vm.computerName, '-', parameters('vmObject').networkInterfaces.name, '-pubIP')]"
+                "[concat('Microsoft.Network/networkSecurityGroups/', parameters('objectect').vm.computerName, '-', parameters('objectect').networkSecurityGroups.name)]",
+                "[concat(parameters('objectect').vm.computerName, '-', parameters('objectect').networkInterfaces.name, '-pubIP')]"
             ],
             "properties": {
                 "ipConfigurations": [
                     {
                         "name": "ipconfig1",
                         "properties": {
-                            "privateIPAddress": "[if(contains(parameters('vmObject').networkInterfaces, 'privateIPAddress'), parameters('vmObject').networkInterfaces.privateIPAddress, json('null'))]",
-                            "privateIPAllocationMethod": "[if(contains(parameters('vmObject').networkInterfaces, 'privateIPAddress'), 'Static', 'Dynamic')]",
+                            "privateIPAddress": "[if(contains(parameters('objectect').networkInterfaces, 'privateIPAddress'), parameters('objectect').networkInterfaces.privateIPAddress, json('null'))]",
+                            "privateIPAllocationMethod": "[if(contains(parameters('objectect').networkInterfaces, 'privateIPAddress'), 'Static', 'Dynamic')]",
                             "subnet": {
-                                "id": "[concat(subscription().id, '/resourceGroups/', parameters('vmObject').networkInterfaces.vnetResourceGroupName, '/providers/Microsoft.Network/virtualNetworks/', parameters('vmObject').networkInterfaces.vnetName, '/subnets/', parameters('vmObject').networkInterfaces.subnetName)]"
+                                "id": "[concat(subscription().id, '/resourceGroups/', parameters('objectect').networkInterfaces.vnetResourceGroupName, '/providers/Microsoft.Network/virtualNetworks/', parameters('objectect').networkInterfaces.vnetName, '/subnets/', parameters('objectect').networkInterfaces.subnetName)]"
                             },
-                            "publicIPAddress": "[if(contains(parameters('vmObject').networkInterfaces, 'publicIPAddressesProperties'), pspc.getPublicIPAddressResource(parameters('vmObject').vm.computerName, parameters('vmObject').networkInterfaces.name), json('null'))]",
-                            "applicationSecurityGroups": "[if(contains(parameters('vmObject').vm, 'applicationSecurityGroups'), pspc.arrayASGConfig(parameters('vmObject').vm.applicationSecurityGroups), json('null'))]"
+                            "publicIPAddress": "[if(contains(parameters('objectect').networkInterfaces, 'publicIPAddressesProperties'), pspc.getPublicIPAddressResource(parameters('objectect').vm.computerName, parameters('objectect').networkInterfaces.name), json('null'))]",
+                            "applicationSecurityGroups": "[if(contains(parameters('objectect').vm, 'applicationSecurityGroups'), pspc.arrayASGConfig(parameters('objectect').vm.applicationSecurityGroups), json('null'))]"
                         }
                     }
                 ],
                 "dnsSettings": {
-                    "dnsServers": "[if(contains(parameters('vmObject').networkInterfaces, 'dnsServerPrivateIp'), parameters('vmObject').networkInterfaces.dnsServerPrivateIp, json('[]'))]"
+                    "dnsServers": "[if(contains(parameters('objectect').networkInterfaces, 'dnsServerPrivateIp'), parameters('objectect').networkInterfaces.dnsServerPrivateIp, json('[]'))]"
                 },
-                "enableAcceleratedNetworking": "[parameters('vmObject').networkInterfaces.acceleratedNetworking]",
+                "enableAcceleratedNetworking": "[parameters('objectect').networkInterfaces.acceleratedNetworking]",
                 "networkSecurityGroup": {
-                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(parameters('vmObject').vm.computerName, '-', parameters('vmObject').networkSecurityGroups.name))]"
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(parameters('objectect').vm.computerName, '-', parameters('objectect').networkSecurityGroups.name))]"
                 }
             }
         },
         {
             "type": "Microsoft.Resources/deployments",
-            "name": "[concat(parameters('vmObject').vm.computerName, '-', parameters('vmObject').networkInterfaces.name, '-makeIPStatic')]",
+            "name": "[concat(parameters('objectect').vm.computerName, '-', parameters('objectect').networkInterfaces.name, '-makeIPStatic')]",
             "apiVersion": "2017-08-01",
             "dependsOn": [
-                "[concat(parameters('vmObject').vm.computerName, '-', parameters('vmObject').networkInterfaces.name)]",
-                "[concat(parameters('vmObject').vm.computerName, '-', parameters('vmObject').networkInterfaces.name, '-pubIP')]"
+                "[concat(parameters('objectect').vm.computerName, '-', parameters('objectect').networkInterfaces.name)]",
+                "[concat(parameters('objectect').vm.computerName, '-', parameters('objectect').networkInterfaces.name, '-pubIP')]"
             ],
-            "condition": "[not(contains(parameters('vmObject').networkInterfaces, 'privateIPAddress'))]",
+            "condition": "[not(contains(parameters('objectect').networkInterfaces, 'privateIPAddress'))]",
             "properties": {
                 "mode": "Incremental",
                 "template": {
@@ -246,51 +266,29 @@
                     "resources": [
                         {
                             "type": "Microsoft.Network/networkInterfaces",
-                            "name": "[concat(parameters('vmObject').vm.computerName, '-', parameters('vmObject').networkInterfaces.name)]",
+                            "name": "[concat(parameters('objectect').vm.computerName, '-', parameters('objectect').networkInterfaces.name)]",
                             "apiVersion": "2018-03-01",
                             "location": "[resourceGroup().location]",
-                            "properties": {
-                                "ipConfigurations": [
-                                    {
-                                        "name": "ipconfig1",
-                                        "properties": {
-                                            "privateIPAddress": "[reference(concat('Microsoft.Network/networkInterfaces/', concat(parameters('vmObject').vm.computerName, '-', parameters('vmObject').networkInterfaces.name))).ipConfigurations[0].properties.privateIPAddress]",
-                                            "privateIPAllocationMethod": "Static",
-                                            "subnet": {
-                                                "id": "[concat(subscription().id, '/resourceGroups/', parameters('vmObject').networkInterfaces.vnetResourceGroupName, '/providers/Microsoft.Network/virtualNetworks/', parameters('vmObject').networkInterfaces.vnetName, '/subnets/', parameters('vmObject').networkInterfaces.subnetName)]"
-                                            },
-                                            "publicIPAddress": "[if(contains(parameters('vmObject').networkInterfaces, 'publicIPAddressesProperties'), pspc.getPublicIPAddressResource(parameters('vmObject').vm.computerName, parameters('vmObject').networkInterfaces.name), json('null'))]",
-                                            "applicationSecurityGroups": "[if(contains(parameters('vmObject').vm, 'applicationSecurityGroups'), pspc.arrayASGConfig(parameters('vmObject').vm.applicationSecurityGroups), json('null'))]"
-                                        }
-                                    }
-                                ],
-                                "dnsSettings": {
-                                    "dnsServers": "[reference(concat('Microsoft.Network/networkInterfaces/', concat(parameters('vmObject').vm.computerName, '-', parameters('vmObject').networkInterfaces.name))).dnsSettings.dnsServers]"
-                                },
-                                "enableAcceleratedNetworking": "[reference(concat('Microsoft.Network/networkInterfaces/', concat(parameters('vmObject').vm.computerName, '-', parameters('vmObject').networkInterfaces.name))).enableAcceleratedNetworking]",
-                                "networkSecurityGroup": {
-                                    "id": "[reference(concat('Microsoft.Network/networkInterfaces/', concat(parameters('vmObject').vm.computerName, '-', parameters('vmObject').networkInterfaces.name))).networkSecurityGroup.Id]"
-                                }
-                            }
+                            "properties": "[pspc.replaceInObject(reference(concat('Microsoft.Network/networkInterfaces/', concat(parameters('objectect').vm.computerName, '-', parameters('objectect').networkInterfaces.name))).ipConfigurations[0], '\"privateIPAllocationMethod\": \"Dynamic\"', '\"privateIPAllocationMethod\": \"Static\"')]"
                         }
                     ]
                 }
             }
         },
         {
-            "name": "[concat(parameters('vmObject').vm.computerName, '-', parameters('vmObject').networkSecurityGroups.name)]",
+            "name": "[concat(parameters('objectect').vm.computerName, '-', parameters('objectect').networkSecurityGroups.name)]",
             "type": "Microsoft.Network/networkSecurityGroups",
             "apiVersion": "2018-01-01",
-            "tags": "[parameters('vmObject').tagValues]",
+            "tags": "[parameters('objectect').tagValues]",
             "location": "[resourceGroup().location]",
-            "properties": "[parameters('vmObject').networkSecurityGroups.properties]"
+            "properties": "[parameters('objectect').networkSecurityGroups.properties]"
         },
         {
-            "condition": "[contains(parameters('vmObject').vm,'backupConfig')]",
+            "condition": "[contains(parameters('objectect').vm,'backupConfig')]",
             "apiVersion": "2017-05-10",
-            "name": "[concat(parameters('vmObject').vm.computerName, '-' , 'BackupIntent')]",
+            "name": "[concat(parameters('objectect').vm.computerName, '-' , 'BackupIntent')]",
             "type": "Microsoft.Resources/deployments",
-            "resourceGroup": "[if(contains(parameters('vmObject').vm,'backupConfig'), parameters('vmObject').vm.backupConfig.existingBackupVaultRG, 'nothing')]",
+            "resourceGroup": "[if(contains(parameters('objectect').vm,'backupConfig'), parameters('objectect').vm.backupConfig.existingBackupVaultRG, 'nothing')]",
             "properties": {
                 "mode": "Incremental",
                 "template": {
@@ -298,26 +296,26 @@
                     "contentVersion": "1.0.0.0",
                     "resources": [
                         {
-                            "name": "[concat(parameters('vmObject').vm.backupConfig.existingBackupVaultName, '/','Azure', '/', variables('backupItemName'))]",
+                            "name": "[concat(parameters('objectect').vm.backupConfig.existingBackupVaultName, '/','Azure', '/', variables('backupItemName'))]",
                             "apiVersion": "2017-07-01",
                             "type": "Microsoft.RecoveryServices/vaults/backupFabrics/backupProtectionIntent",
                             "properties": {
-                                "friendlyName": "[concat(parameters('vmObject').vm.computerName, 'BackupIntent')]",
+                                "friendlyName": "[concat(parameters('objectect').vm.computerName, 'BackupIntent')]",
                                 "protectionIntentItemType": "AzureResourceItem",
-                                "policyId": "[resourceId(parameters('vmObject').vm.backupConfig.existingBackupVaultRG, 'Microsoft.RecoveryServices/vaults/backupPolicies', parameters('vmObject').vm.backupConfig.existingBackupVaultName, parameters('vmObject').vm.backupConfig.existingBackupPolicy)]",
-                                "sourceResourceId": "[resourceId(resourceGroup().name, 'Microsoft.Compute/virtualMachines', concat(parameters('vmObject').vm.computerName))]"
+                                "policyId": "[resourceId(parameters('objectect').vm.backupConfig.existingBackupVaultRG, 'Microsoft.RecoveryServices/vaults/backupPolicies', parameters('objectect').vm.backupConfig.existingBackupVaultName, parameters('objectect').vm.backupConfig.existingBackupPolicy)]",
+                                "sourceResourceId": "[resourceId(resourceGroup().name, 'Microsoft.Compute/virtualMachines', concat(parameters('objectect').vm.computerName))]"
                             }
                         }
                     ]
                 }
             },
             "dependsOn": [
-                "[concat('Deploy-', parameters('vmObject').vm.computerName)]"
+                "[concat('Deploy-', parameters('objectect').vm.computerName)]"
             ]
         },
         {
-            "condition": "[contains(parameters('vmObject').vm,'antimalwareInfo')]",
-            "name": "[concat('microsoft.antimalware-windows-20180924102643', parameters('vmObject').vm.computerName)]",
+            "condition": "[contains(parameters('objectect').vm,'antimalwareInfo')]",
+            "name": "[concat('microsoft.antimalware-windows-20180924102643', parameters('objectect').vm.computerName)]",
             "apiVersion": "2015-01-01",
             "type": "Microsoft.Resources/deployments",
             "properties": {
@@ -327,48 +325,48 @@
                 },
                 "parameters": {
                     "vmName": {
-                        "value": "[parameters('vmObject').vm.computerName]"
+                        "value": "[parameters('objectect').vm.computerName]"
                     },
                     "location": {
                         "value": "[resourceGroup().location]"
                     },
                     "ExclusionsPaths": {
-                        "value": "[parameters('vmObject').vm.antimalwareInfo.exclusionPaths]"
+                        "value": "[parameters('objectect').vm.antimalwareInfo.exclusionPaths]"
                     },
                     "ExclusionsExtensions": {
-                        "value": "[parameters('vmObject').vm.antimalwareInfo.exclusionExtensions]"
+                        "value": "[parameters('objectect').vm.antimalwareInfo.exclusionExtensions]"
                     },
                     "ExclusionsProcesses": {
-                        "value": "[parameters('vmObject').vm.antimalwareInfo.exclusionProcesses]"
+                        "value": "[parameters('objectect').vm.antimalwareInfo.exclusionProcesses]"
                     },
                     "RealtimeProtectionEnabled": {
-                        "value": "[parameters('vmObject').vm.antimalwareInfo.realtimeProtectionEnabled]"
+                        "value": "[parameters('objectect').vm.antimalwareInfo.realtimeProtectionEnabled]"
                     },
                     "ScheduledScanSettingsIsEnabled": {
-                        "value": "[parameters('vmObject').vm.antimalwareInfo.scheduledScanSettingsEnabled]"
+                        "value": "[parameters('objectect').vm.antimalwareInfo.scheduledScanSettingsEnabled]"
                     },
                     "ScheduledScanSettingsScanType": {
-                        "value": "[parameters('vmObject').vm.antimalwareInfo.scheduledScanSettingsType]"
+                        "value": "[parameters('objectect').vm.antimalwareInfo.scheduledScanSettingsType]"
                     },
                     "ScheduledScanSettingsDay": {
-                        "value": "[parameters('vmObject').vm.antimalwareInfo.scheduledScanSettingsDay]"
+                        "value": "[parameters('objectect').vm.antimalwareInfo.scheduledScanSettingsDay]"
                     },
                     "ScheduledScanSettingsTime": {
-                        "value": "[parameters('vmObject').vm.antimalwareInfo.scheduledScanSettingsTime]"
+                        "value": "[parameters('objectect').vm.antimalwareInfo.scheduledScanSettingsTime]"
                     }
                 }
             },
             "dependsOn": [
-                "[concat('Deploy-', parameters('vmObject').vm.computerName)]"
+                "[concat('Deploy-', parameters('objectect').vm.computerName)]"
             ]
         },
         {
-            "condition": "[contains(parameters('vmObject'),'domainObject')]",
+            "condition": "[contains(parameters('objectect'),'domainObject')]",
             "type": "Microsoft.Resources/deployments",
-            "name": "[concat('DomainJoin-', parameters('vmObject').vm.computerName)]",
+            "name": "[concat('DomainJoin-', parameters('objectect').vm.computerName)]",
             "apiVersion": "2018-02-01",
             "dependsOn": [
-                "[concat('Deploy-', parameters('vmObject').vm.computerName)]"
+                "[concat('Deploy-', parameters('objectect').vm.computerName)]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -380,24 +378,24 @@
                     "adPassword": {
                         "reference": {
                             "keyVault": {
-                                "id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('vmObject').vmKeyVault.keyVaultResourceGroupName, '/providers/Microsoft.KeyVault/vaults/', pspc.getValidKeyvaultName(pspc.getUniqueKeyvaultName(parameters('vmObject').vmKeyVault.keyVaultName, pspc.getResourceGroupID(parameters('vmObject').vmKeyVault.keyVaultResourceGroupName))))]"
+                                "id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('objectect').vmKeyVault.keyVaultResourceGroupName, '/providers/Microsoft.KeyVault/vaults/', pspc.getValidKeyvaultName(pspc.getUniqueKeyvaultName(parameters('objectect').vmKeyVault.keyVaultName, pspc.getResourceGroupID(parameters('objectect').vmKeyVault.keyVaultResourceGroupName))))]"
                             },
-                            "secretName": "[parameters('vmObject').domainObject.domainUserSecretName]"
+                            "secretName": "[parameters('objectect').domainObject.domainUserSecretName]"
                         }
                     },
-                    "vmObject": {
-                        "value": "[parameters('vmObject')]"
+                    "objectect": {
+                        "value": "[parameters('objectect')]"
                     }
                 }
             }
         },
         {
-            "condition": "[contains(parameters('vmObject'),'omsAgentForLinux')]",
+            "condition": "[contains(parameters('objectect'),'omsAgentForLinux')]",
             "type": "Microsoft.Resources/deployments",
-            "name": "[concat('OmsAgentForLinux-', parameters('vmObject').vm.computerName)]",
+            "name": "[concat('OmsAgentForLinux-', parameters('objectect').vm.computerName)]",
             "apiVersion": "2018-02-01",
             "dependsOn": [
-                "[concat('Deploy-', parameters('vmObject').vm.computerName)]"
+                "[concat('Deploy-', parameters('objectect').vm.computerName)]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -406,19 +404,19 @@
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
-                    "vmObject": {
-                        "value": "[parameters('vmObject')]"
+                    "objectect": {
+                        "value": "[parameters('objectect')]"
                     }
                 }
             }
         },
         {
-            "condition": "[contains(parameters('vmObject'),'omsAgentForWindows')]",
+            "condition": "[contains(parameters('objectect'),'omsAgentForWindows')]",
             "type": "Microsoft.Resources/deployments",
-            "name": "[concat('OmsAgentForWindows-', parameters('vmObject').vm.computerName)]",
+            "name": "[concat('OmsAgentForWindows-', parameters('objectect').vm.computerName)]",
             "apiVersion": "2018-02-01",
             "dependsOn": [
-                "[concat('Deploy-', parameters('vmObject').vm.computerName)]"
+                "[concat('Deploy-', parameters('objectect').vm.computerName)]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -427,19 +425,19 @@
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
-                    "vmObject": {
-                        "value": "[parameters('vmObject')]"
+                    "objectect": {
+                        "value": "[parameters('objectect')]"
                     }
                 }
             }
         },
         {
-            "condition": "[contains(parameters('vmObject'),'AADLoginForLinux')]",
+            "condition": "[contains(parameters('objectect'),'AADLoginForLinux')]",
             "type": "Microsoft.Resources/deployments",
-            "name": "[concat('Install-LinuxDomainJoin-Extension-', parameters('vmObject').vm.computerName)]",
+            "name": "[concat('Install-LinuxDomainJoin-Extension-', parameters('objectect').vm.computerName)]",
             "apiVersion": "2018-02-01",
             "dependsOn": [
-                "[concat('Deploy-', parameters('vmObject').vm.computerName)]"
+                "[concat('Deploy-', parameters('objectect').vm.computerName)]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -448,20 +446,20 @@
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
-                    "vmObject": {
-                        "value": "[parameters('vmObject')]"
+                    "objectect": {
+                        "value": "[parameters('objectect')]"
                     }
                 }
             }
         },
         {
-            "condition": "[contains(parameters('vmObject').vm,'linuxScript')]",
-            "name": "[concat(parameters('vmObject').vm.computerName,'/LinuxCustomScript')]",
+            "condition": "[contains(parameters('objectect').vm,'linuxScript')]",
+            "name": "[concat(parameters('objectect').vm.computerName,'/LinuxCustomScript')]",
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "location": "[resourceGroup().location]",
             "apiVersion": "2015-06-15",
             "dependsOn": [
-                "[concat('Deploy-', parameters('vmObject').vm.computerName)]"
+                "[concat('Deploy-', parameters('objectect').vm.computerName)]"
             ],
             "properties": {
                 "publisher": "Microsoft.Azure.Extensions",
@@ -469,16 +467,16 @@
                 "typeHandlerVersion": "2.0",
                 "autoUpgradeMinorVersion": true,
                 "settings": {},
-                "protectedSettings": "[parameters('vmObject').vm.linuxScript.protectedSettings]"
+                "protectedSettings": "[parameters('objectect').vm.linuxScript.protectedSettings]"
             }
         },
         {
-            "condition": "[contains(parameters('vmObject').vm,'encryptDisks')]",
+            "condition": "[contains(parameters('objectect').vm,'encryptDisks')]",
             "type": "Microsoft.Resources/deployments",
-            "name": "[concat('EncryptWindows-', parameters('vmObject').vm.computerName)]",
+            "name": "[concat('EncryptWindows-', parameters('objectect').vm.computerName)]",
             "apiVersion": "2018-02-01",
             "dependsOn": [
-                "[concat('Deploy-', parameters('vmObject').vm.computerName)]"
+                "[concat('Deploy-', parameters('objectect').vm.computerName)]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -487,19 +485,19 @@
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
-                    "vmObject": {
-                        "value": "[parameters('vmObject')]"
+                    "objectect": {
+                        "value": "[parameters('objectect')]"
                     }
                 }
             }
         },
         {
-            "condition": "[contains(parameters('vmObject').vm,'encryptDisksLinux')]",
+            "condition": "[contains(parameters('objectect').vm,'encryptDisksLinux')]",
             "type": "Microsoft.Resources/deployments",
-            "name": "[concat('EncryptLinux-', parameters('vmObject').vm.computerName)]",
+            "name": "[concat('EncryptLinux-', parameters('objectect').vm.computerName)]",
             "apiVersion": "2018-02-01",
             "dependsOn": [
-                "[concat('Deploy-', parameters('vmObject').vm.computerName)]"
+                "[concat('Deploy-', parameters('objectect').vm.computerName)]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -508,20 +506,20 @@
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
-                    "vmObject": {
-                        "value": "[parameters('vmObject')]"
+                    "objectect": {
+                        "value": "[parameters('objectect')]"
                     }
                 }
             }
         },
         {
-            "condition": "[contains(parameters('vmObject').vm,'WebServerSettings')]",
+            "condition": "[contains(parameters('objectect').vm,'WebServerSettings')]",
             "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(parameters('vmObject').vm.computerName,'/', variables('iisExtensionName'))]",
+            "name": "[concat(parameters('objectect').vm.computerName,'/', variables('iisExtensionName'))]",
             "apiVersion": "2015-05-01-preview",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[concat('Deploy-', parameters('vmObject').vm.computerName)]"
+                "[concat('Deploy-', parameters('objectect').vm.computerName)]"
             ],
             "properties": {
                 "publisher": "Microsoft.Powershell",
@@ -533,30 +531,30 @@
                     "modulesUrl": "[variables('iisModuleUrl')]",
                     "configurationFunction": "[variables('iisConfigurationFunction')]",
                     "properties": {
-                        "nodeName": "[parameters('vmObject').vm.computerName]",
-                        "webDeployPackage": "[parameters('vmObject').vm.WebServerSettings.webDeployPackage]",
-                        "certStoreName": "[parameters('vmObject').vm.WebServerSettings.certificateStoreName]",
-                        "certDomain": "[parameters('vmObject').vm.WebServerSettings.certificateDomain]"
+                        "nodeName": "[parameters('objectect').vm.computerName]",
+                        "webDeployPackage": "[parameters('objectect').vm.WebServerSettings.webDeployPackage]",
+                        "certStoreName": "[parameters('objectect').vm.WebServerSettings.certificateStoreName]",
+                        "certDomain": "[parameters('objectect').vm.WebServerSettings.certificateDomain]"
                     }
                 },
                 "protectedSettings": {}
             }
         },
         {
-            "condition": "[contains(parameters('vmObject').vm,'DSCSettings')]",
+            "condition": "[contains(parameters('objectect').vm,'DSCSettings')]",
             "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(parameters('vmObject').vm.computerName,'/', 'DSCExtensionName')]",
+            "name": "[concat(parameters('objectect').vm.computerName,'/', 'DSCExtensionName')]",
             "apiVersion": "2019-03-01",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[concat('Deploy-', parameters('vmObject').vm.computerName)]"
+                "[concat('Deploy-', parameters('objectect').vm.computerName)]"
             ],
             "properties": {
                 "publisher": "Microsoft.Powershell",
                 "type": "DSC",
                 "typeHandlerVersion": "2.77",
                 "autoUpgradeMinorVersion": true,
-                "settings": "[parameters('vmObject').vm.DSCSettings]",
+                "settings": "[parameters('objectect').vm.DSCSettings]",
                 "protectedSettings": {
                     "configurationUrlSasToken": "[parameters('containerSasToken')]"
                 }
@@ -566,11 +564,11 @@
     "outputs": {
         "nic": {
             "type": "object",
-            "value": "[reference(concat(parameters('vmObject').vm.computerName, '-', parameters('vmObject').networkInterfaces.name))]"
+            "value": "[reference(concat(parameters('objectect').vm.computerName, '-', parameters('objectect').networkInterfaces.name))]"
         },
         "WebServerSet": {
             "type": "bool",
-            "value": "[contains(parameters('vmObject').vm,'WebServerSettings')]"
+            "value": "[contains(parameters('objectect').vm,'WebServerSettings')]"
         },
         "iisUrl": {
             "type": "string",
