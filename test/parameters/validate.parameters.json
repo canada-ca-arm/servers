@@ -30,24 +30,7 @@
                                     "storageAccountType": "StandardSSD_LRS"
                                 }
                             },
-                            "dataDisks": [
-                                {
-                                    "diskSizeGB": "1024",
-                                    "lun": 0,
-                                    "createOption": "Empty",
-                                    "managedDisk": {
-                                        "storageAccountType": "StandardSSD_LRS"
-                                    }
-                                },
-                                {
-                                    "diskSizeGB": "512",
-                                    "lun": 1,
-                                    "createOption": "Empty",
-                                    "managedDisk": {
-                                        "storageAccountType": "StandardSSD_LRS"
-                                    }
-                                }
-                            ],
+                            "dataDisks": [],
                             "imageReference": {
                                 "publisher": "Canonical",
                                 "offer": "UbuntuServer",
