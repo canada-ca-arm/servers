@@ -91,6 +91,24 @@
                         "type": "string",
                         "value": "[if(greater(length(parameters('keyvaultName')),24), concat(substring(parameters('keyvaultName'), 0, 24)), parameters('keyvaultName'))]"
                     }
+                },
+                "getPublicIPAddressResource": {
+                    "parameters": [
+                        {
+                            "name": "computerName",
+                            "type": "string"
+                        },
+                        {
+                            "name": "networkInterfaceName",
+                            "type": "string"
+                        }
+                    ],
+                    "output": {
+                        "type": "object",
+                        "value": {
+                            "id": "[resourceId ('Microsoft.Network/publicIPAddresses/', concat(parameters('computerName'), '-', parameters('networkInterfaceName'), '-pubIP'))]"
+                        }
+                    }
                 }
             }
         }
@@ -190,7 +208,8 @@
                                 "id": "[concat(subscription().id, '/resourceGroups/', parameters('vmObject').networkInterfaces.vnetResourceGroupName, '/providers/Microsoft.Network/virtualNetworks/', parameters('vmObject').networkInterfaces.vnetName, '/subnets/', parameters('vmObject').networkInterfaces.subnetName)]"
                             },
                             "privateIPAllocationMethod": "[if(contains(parameters('vmObject').networkInterfaces, 'privateIPAddress'), 'Static', 'Dynamic')]",
-                            "privateIPAddress": "[if(contains(parameters('vmObject').networkInterfaces, 'privateIPAddress'), parameters('vmObject').networkInterfaces.privateIPAddress, json('null'))]"
+                            "privateIPAddress": "[if(contains(parameters('vmObject').networkInterfaces, 'privateIPAddress'), parameters('vmObject').networkInterfaces.privateIPAddress, json('null'))]",
+                            "publicIPAddress": "[if(contains(parameters('vmObject').networkInterfaces, 'publicIPAddressesProperties'), pspc.getPublicIPAddressResource(parameters('vmObject').vm.computerName, parameters('vmObject').networkInterfaces.name), json('null'))]"
                         }
                     }
                 ],
