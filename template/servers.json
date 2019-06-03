@@ -193,7 +193,7 @@
         {
             "name": "[concat(parameters('vmObject').vm.computerName, '-', parameters('vmObject').networkInterfaces.name)]",
             "type": "Microsoft.Network/networkInterfaces",
-            "apiVersion": "2018-08-01",
+            "apiVersion": "2019-02-01",
             "tags": "[parameters('vmObject').tagValues]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
