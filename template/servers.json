@@ -255,18 +255,18 @@
                                             "subnet": {
                                                 "id": "[concat(subscription().id, '/resourceGroups/', parameters('vmObject').networkInterfaces.vnetResourceGroupName, '/providers/Microsoft.Network/virtualNetworks/', parameters('vmObject').networkInterfaces.vnetName, '/subnets/', parameters('vmObject').networkInterfaces.subnetName)]"
                                             },
-                                            "privateIPAddress": "[if(contains(parameters('vmObject').networkInterfaces, 'privateIPAddress'), parameters('vmObject').networkInterfaces.privateIPAddress, json('null'))]",
+                                            "privateIPAddress": "[reference(concat('Microsoft.Network/networkInterfaces/', concat(parameters('vmObject').vm.computerName, '-', parameters('vmObject').networkInterfaces.name))).ipConfigurations[0].properties.privateIPAddress]",
                                             "publicIPAddress": "[if(contains(parameters('vmObject').networkInterfaces, 'publicIPAddressesProperties'), pspc.getPublicIPAddressResource(parameters('vmObject').vm.computerName, parameters('vmObject').networkInterfaces.name), json('null'))]",
                                             "applicationSecurityGroups": "[if(contains(parameters('vmObject').vm, 'applicationSecurityGroups'), pspc.arrayASGConfig(parameters('vmObject').vm.applicationSecurityGroups), json('null'))]"
                                         }
                                     }
                                 ],
                                 "dnsSettings": {
-                                    "dnsServers": "[if(contains(parameters('vmObject').networkInterfaces, 'dnsServerPrivateIp'), parameters('vmObject').networkInterfaces.dnsServerPrivateIp, json('[]'))]"
+                                    "dnsServers": "[reference(concat('Microsoft.Network/networkInterfaces/', concat(parameters('vmObject').vm.computerName, '-', parameters('vmObject').networkInterfaces.name))).dnsSettings.dnsServers]"
                                 },
-                                "enableAcceleratedNetworking": "[parameters('vmObject').networkInterfaces.acceleratedNetworking]",
+                                "enableAcceleratedNetworking": "[reference(concat('Microsoft.Network/networkInterfaces/', concat(parameters('vmObject').vm.computerName, '-', parameters('vmObject').networkInterfaces.name))).enableAcceleratedNetworking]",
                                 "networkSecurityGroup": {
-                                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(parameters('vmObject').vm.computerName, '-', parameters('vmObject').networkSecurityGroups.name))]"
+                                    "id": "[reference(concat('Microsoft.Network/networkInterfaces/', concat(parameters('vmObject').vm.computerName, '-', parameters('vmObject').networkInterfaces.name))).networkSecurityGroup.Id]"
                                 }
                             }
                         }
