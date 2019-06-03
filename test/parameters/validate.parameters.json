@@ -48,7 +48,7 @@
                         "publicIPAddressesProperties": {
                             "publicIPAllocationMethod": "Dynamic",
                             "dnsSettings": {
-                                "domainNameLabel": "mytestvm[unique]"
+                                "domainNameLabel": "mytestvmmjo8servtnuweovly"
                             }
                         }
                     },

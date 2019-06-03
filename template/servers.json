@@ -170,10 +170,7 @@
                         "value": "[concat(parameters('vmObject').vm.computerName, '-', parameters('vmObject').networkInterfaces.name, '-pubIP')]"
                     }
                 }
-            },
-            "dependsOn": [
-                "[concat('Deploy-', parameters('vmObject').vm.computerName)]"
-            ]
+            }
         },
         {
             "name": "[concat(parameters('vmObject').vm.computerName, '-', parameters('vmObject').networkInterfaces.name)]",
